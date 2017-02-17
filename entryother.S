@@ -51,7 +51,9 @@ start32:
   movw    %ax, %ds                # -> DS: Data Segment
   movw    %ax, %es                # -> ES: Extra Segment
   movw    %ax, %ss                # -> SS: Stack Segment
-  movw    $0, %ax                 # Zero segments not ready for use
+  xorl    %eax, %eax              # Zero segments not ready for use.
+                                  # Using eax instead of ax generates
+                                  # shorter code
   movw    %ax, %fs                # -> FS
   movw    %ax, %gs                # -> GS
 
@@ -77,8 +79,7 @@ start32:
   outw    %ax, %dx
   movw    $0x8ae0, %ax
   outw    %ax, %dx
-spin:
-  jmp     spin
+  hlt
 
 .p2align 2
 gdt:
