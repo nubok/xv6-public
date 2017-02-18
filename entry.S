@@ -22,6 +22,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "param.h"
+#include "entry_macros.S"
 
 # Multiboot header.  Data to direct multiboot loader.
 .p2align 2
@@ -43,17 +44,13 @@ _start = V2P_WO(entry)
 # Entering xv6 on boot processor, with paging off.
 .globl entry
 entry:
-  # Turn on page size extension for 4Mbyte pages
-  movl    %cr4, %eax
-  orl     $(CR4_PSE), %eax
-  movl    %eax, %cr4
+  TURN_ON_PAGE_SIZE_EXTENSION
+
   # Set page directory
   movl    $(V2P_WO(entrypgdir)), %eax
   movl    %eax, %cr3
-  # Turn on paging.
-  movl    %cr0, %eax
-  orl     $(CR0_PG|CR0_WP), %eax
-  movl    %eax, %cr0
+
+  TURN_ON_PAGING
 
   # Set up the stack pointer.
   movl $(stack + KSTACKSIZE), %esp
