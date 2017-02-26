@@ -117,6 +117,15 @@ sti(void)
   asm volatile("sti");
 }
 
+static inline void __attribute__((noreturn))
+hlt(void)
+{
+  asm volatile("hlt");
+  // If we don't add this infinite loop, gcc gives a warning.
+  for(;;)
+    ;
+}
+
 static inline uint
 xchg(volatile uint *addr, uint newval)
 {

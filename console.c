@@ -118,8 +118,7 @@ panic(char *s)
   for(i=0; i<10; i++)
     cprintf(" %p", pcs[i]);
   panicked = 1; // freeze other CPU
-  for(;;)
-    ;
+  hlt();
 }
 
 //PAGEBREAK: 50
@@ -166,8 +165,7 @@ consputc(int c)
 {
   if(panicked){
     cli();
-    for(;;)
-      ;
+    hlt();
   }
 
   if(c == BACKSPACE){
